@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>課題管理人|設定</title>
+</head>
+<body>
+
+<h2>Manabaの認証情報設定</h2>
+
+<form action="/option" method="POST">
+    <div>
+        <input type="text" name="manabaid" placeholder="Manaba ID" value='{{ manaba_id }}'>
+    </div>
+    <div>
+        <input type="password" name="manabapass" placeholder="パスワード">
+    </div>
+    <div>
+        <button>save</button>
+    </div>
+</form>
+
+<div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>
+
+<div>
+    <p><a href="https://line.me/R/ti/p/%40830msuhi">こちら</a>から友達登録をして設定完了です。</p>
+</div>
+
+<form action="/logout" method="post">
+<button>logout</button>
+</form>
+
+</body>
+</html>
