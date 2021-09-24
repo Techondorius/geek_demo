@@ -1,5 +1,4 @@
 import os
-import re
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
@@ -9,6 +8,10 @@ from linebot.models import TextSendMessage
 
 from . import db
 from .models import User
+
+# import re
+
+
 
 main = Blueprint('main', __name__)
 YOUR_CHANNEL_ACCESS_TOKEN = os.getenv("YOUR_CHANNEL_ACCESS_TOKEN",'none')
@@ -24,7 +27,6 @@ def profile():
 @login_required
 def option():
     if current_user.manaba_id != 'default':
-        print(current_user.manaba_id)
         return redirect(url_for('main.option_name', name=current_user.manaba_id))
     return render_template('option.html', manaba_id='')
 
@@ -41,10 +43,15 @@ def option_post():
     line_id = current_user.line_id
     manaba_id_pattern = '[A-Z][0-9]{2}[A-Z][0-9]{4}'
 
-    if re.match(manaba_id_pattern, name):
-        name_correct_bool = True
-    else:
+    # if re.match(manaba_id_pattern, name):
+    #     name_correct_bool = True
+    # else:
+    #     name_correct_bool = False
+
+    if name =='' or len(name) > 8:
         name_correct_bool = False
+    else:
+        name_correct_bool = True
 
     if not manabapass == '':
         manabapass_correct_bool = True
@@ -52,22 +59,21 @@ def option_post():
         manabapass_correct_bool = False
 
 
-    print(name_correct_bool,manabapass_correct_bool)
-
-
     if not name_correct_bool and not manabapass_correct_bool:
-        flash('Everything is wrong!!!!')
+        flash('IDは1文字以上8文字以内です & パスワードを入力してください。')
     elif not manabapass_correct_bool:
-        flash('ENTER PASSWORD!!!!!!')
+        flash('パスワードを入力してください')
     elif not name_correct_bool:
-        flash('Manaba ID is incorrect!!!')
+        flash('IDは1文字以上8文字以内です')
     else:
         user = User.query.filter_by(line_id=line_id).first()
         if not user:
+            # LINE IDが見つけられなかった場合の超例外的措置
             logout_user()
             flash('A serious error occured. Please Retry.')
             return redirect(url_for('line.index'))
         else:
+            # ログイン情報書き換え
             user.manaba_id = name
             user.manaba_pass = manabapass
             db.session.commit()
