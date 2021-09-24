@@ -81,8 +81,12 @@ def option_post():
 
     return redirect(url_for('main.option_name', name=name))
 
+@main.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('line.index'))
 
 @main.route('/logout', methods=['POST'])
-def logout():
+def logout_post():
     logout_user()
     return redirect(url_for('line.index'))
