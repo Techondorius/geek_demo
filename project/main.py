@@ -30,6 +30,12 @@ def option():
         return redirect(url_for('main.option_name', name=current_user.manaba_id))
     return render_template('option.html', manaba_id='')
 
+@main.route('/option/')
+@login_required
+def option_slash():
+    flash('IDは1文字以上8文字以内です & パスワードを入力してください。')
+    return render_template('option.html', manaba_id='')
+
 @main.route('/option/<string:name>')
 @login_required
 def option_name(name):
