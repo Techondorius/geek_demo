@@ -96,3 +96,7 @@ def logout():
 def logout_post():
     logout_user()
     return redirect(url_for('line.index'))
+
+@main.route("/slide")
+def slide():
+    return redirect('https://docs.google.com/presentation/d/1_o-gU-dgIPcFfE4NC1aC5JUML3CbrGIk7e2-F93CJ4Q/edit?usp=sharing')
