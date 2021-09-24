@@ -86,7 +86,6 @@ def line_login():
     # トークンを取得するためにリクエストを送る
     response_post = requests.post(uri_access_token, headers=headers, data=data_params)
 
-    # 今回は"id_token"のみを使用する
     line_id_token = json.loads(response_post.text)["id_token"]
 
     access_token = json.loads(response_post.text)["access_token"]
