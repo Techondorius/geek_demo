@@ -140,15 +140,16 @@ class utatenres:
 
         processed_data = BeautifulSoup(res.text, 'html.parser')
 
-        lyric_text = processed_data.find('div', {'class' : 'hiragana'})
+        lyric_text = processed_data.find('div', {'class': 'hiragana'})
 
         lyric_text = str(lyric_text)
 
-        lyric_text = lyric_text.replace('<br>','')
-        lyric_text = lyric_text.replace('<br/>','')
+        lyric_text = lyric_text.replace('<br>', '')
+        lyric_text = lyric_text.replace('<br/>', '')
         lyric_text = lyric_text.replace('</br>', '\n')
 
-        rt_conpile = re.compile(r'<span class="rt">[\u3041-\u309F\u30A1-\u30FF\uFF66-\uFF9F]+</span>')
+        rt_conpile = re.compile(
+            r'<span class="rt">[\u3041-\u309F\u30A1-\u30FF\uFF66-\uFF9F]+</span>')
         lyric_text = rt_conpile.sub('', lyric_text)
         startdiv_conpile = re.compile('<div class="hiragana">\n')
         lyric_text = startdiv_conpile.sub('', lyric_text)
@@ -157,5 +158,6 @@ class utatenres:
         spacebarrage_compile = re.compile(' + ')
         lyric_text = spacebarrage_compile.sub('', lyric_text)
 
-        lyric_text = lyric_text.replace('<span class="ruby"><span class="rb">', '').replace('</span>', '')
+        lyric_text = lyric_text.replace(
+            '<span class="ruby"><span class="rb">', '').replace('</span>', '')
         return str(lyric_text)

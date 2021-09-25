@@ -12,16 +12,17 @@ from .models import User
 # import re
 
 
-
 main = Blueprint('main', __name__)
-YOUR_CHANNEL_ACCESS_TOKEN = os.getenv("YOUR_CHANNEL_ACCESS_TOKEN",'none')
-YOUR_CHANNEL_SECRET = os.getenv("YOUR_CHANNEL_SECRET",'none')
+YOUR_CHANNEL_ACCESS_TOKEN = os.getenv("YOUR_CHANNEL_ACCESS_TOKEN", 'none')
+YOUR_CHANNEL_SECRET = os.getenv("YOUR_CHANNEL_SECRET", 'none')
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
+
 
 @main.route('/profile')
 @login_required
 def profile():
     return render_template('profile.html', name=current_user.line_id)
+
 
 @main.route('/option')
 @login_required
@@ -30,11 +31,13 @@ def option():
         return redirect(url_for('main.option_name', name=current_user.manaba_id))
     return render_template('option.html', manaba_id='')
 
+
 @main.route('/option/')
 @login_required
 def option_slash():
     flash('IDは1文字以上8文字以内です & パスワードを入力してください。')
     return render_template('option.html', manaba_id='')
+
 
 @main.route('/option/<string:name>')
 @login_required
@@ -42,6 +45,7 @@ def option_name(name):
     if current_user.manaba_id == 'default':
         return render_template('option.html', manaba_id='')
     return render_template('option.html', manaba_id=name)
+
 
 @main.route('/option', methods=['POST'])
 @login_required
@@ -56,7 +60,7 @@ def option_post():
     # else:
     #     name_correct_bool = False
 
-    if name =='' or len(name) > 8:
+    if name == '' or len(name) > 8:
         name_correct_bool = False
     else:
         name_correct_bool = True
@@ -65,7 +69,6 @@ def option_post():
         manabapass_correct_bool = True
     else:
         manabapass_correct_bool = False
-
 
     if not name_correct_bool and not manabapass_correct_bool:
         flash('IDは1文字以上8文字以内です & パスワードを入力してください。')
@@ -95,15 +98,18 @@ def option_post():
 
     return redirect(url_for('main.option_name', name=name))
 
+
 @main.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('line.index'))
 
+
 @main.route('/logout', methods=['POST'])
 def logout_post():
     logout_user()
     return redirect(url_for('line.index'))
+
 
 @main.route("/slide")
 def slide():

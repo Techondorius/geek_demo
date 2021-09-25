@@ -21,8 +21,8 @@ import jwt
 
 line = Blueprint('line', __name__)
 
-YOUR_CHANNEL_ACCESS_TOKEN = os.getenv("YOUR_CHANNEL_ACCESS_TOKEN",'none')
-YOUR_CHANNEL_SECRET = os.getenv("YOUR_CHANNEL_SECRET",'none')
+YOUR_CHANNEL_ACCESS_TOKEN = os.getenv("YOUR_CHANNEL_ACCESS_TOKEN", 'none')
+YOUR_CHANNEL_SECRET = os.getenv("YOUR_CHANNEL_SECRET", 'none')
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
@@ -32,6 +32,7 @@ handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 #         url = request.url.replace('http://', 'https://', 1)
 #         code = 301
 #         return redirect(url, code=code)
+
 
 @line.route("/callback/line_bot_res", methods=['POST'])
 def callback():
@@ -50,6 +51,7 @@ def callback():
 
     return 'OK'
 
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text == '課題一覧':
@@ -57,9 +59,11 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text='【課題一覧】\n9/25 プレゼン\n10/9 結果発表'))
 
-LINE_CHANNEL_ID = os.getenv("LINE_CHANNEL_ID",'none')
-LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET",'none')
+
+LINE_CHANNEL_ID = os.getenv("LINE_CHANNEL_ID", 'none')
+LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET", 'none')
 REDIRECT_URL = "https://miteh.jp.ngrok.io/line/login"
+
 
 @line.route("/", methods=["GET"])
 def index():
@@ -67,6 +71,7 @@ def index():
                            random_state="line1216",
                            channel_id=LINE_CHANNEL_ID,
                            redirect_url=REDIRECT_URL)
+
 
 @line.route("/line/login", methods=["GET"])
 def line_login():
@@ -84,7 +89,8 @@ def line_login():
     }
 
     # トークンを取得するためにリクエストを送る
-    response_post = requests.post(uri_access_token, headers=headers, data=data_params)
+    response_post = requests.post(
+        uri_access_token, headers=headers, data=data_params)
 
     line_id_token = json.loads(response_post.text)["id_token"]
 
@@ -107,5 +113,3 @@ def line_login():
     flash('')
 
     return redirect(url_for('main.option_name', name=user.manaba_id))
-
-
