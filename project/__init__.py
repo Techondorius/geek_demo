@@ -12,8 +12,10 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__,static_url_path='/static')
 
-    app.config['SECRET_KEY'] = 'secret-key-goes-here'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'none')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://localhost:5432/flasknote"
 
     YOUR_CHANNEL_ACCESS_TOKEN = os.getenv("YOUR_CHANNEL_ACCESS_TOKEN",'none')
     YOUR_CHANNEL_SECRET = os.getenv("YOUR_CHANNEL_SECRET",'none')

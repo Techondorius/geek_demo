@@ -39,6 +39,8 @@ def option_slash():
 @main.route('/option/<string:name>')
 @login_required
 def option_name(name):
+    if current_user.manaba_id == 'default':
+        return render_template('option.html', manaba_id='')
     return render_template('option.html', manaba_id=name)
 
 @main.route('/option', methods=['POST'])
@@ -89,7 +91,7 @@ def option_post():
                 )
             )
             flash('Login info saved perfectly!')
-            return redirect(url_for('main.option'))
+            return redirect(url_for('main.option_name', name=user.manaba_id))
 
     return redirect(url_for('main.option_name', name=name))
 
